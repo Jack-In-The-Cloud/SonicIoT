@@ -1,4 +1,4 @@
-- name: Install Arduino CLI
+name: Install Arduino CLI
   run: |
     sudo apt-get update
     sudo apt-get install -y python3 python3-pip
