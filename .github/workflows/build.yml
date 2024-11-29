@@ -1,5 +1,32 @@
-name: Install Arduino CLI
-  run: |
-    sudo apt-get update
-    sudo apt-get install -y python3 python3-pip
-    pip3 install --upgrade arduino-cli
+name: Build and Upload Binary
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Arduino CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip
+          pip3 install --upgrade arduino-cli
+
+      - name: Compile Sketch
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
+          arduino-cli compile --fqbn esp32:esp32:m5stick-c SonicIoT.ino
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled_binary
+          path: .pio/build/m5stick-c/firmware.bin
