@@ -1,25 +1,9 @@
-// Nemo Firmware for the M5 Stack Stick C Plus
-// github.com/n0xa | IG: @4x0nn
 
-// -=-=-=-=-=-=- Uncomment the platform you're building for -=-=-=-=-=-=-
-// #define STICK_C_PLUS
-// #define STICK_C_PLUS2
-// #define STICK_C
-// #define CARDPUTER
-// -=-=- Uncommenting more than one at a time will result in errors -=-=-
-
-// -=-=- NEMO Language for Menu and Portal -=- Thanks, @marivaaldo and @Mmatuda! -=-=-
-// #define LANGUAGE_EN_US
-// #define LANGUAGE_PT_BR
-// #define LANGUAGE_IT_IT
-// #define LANGUAGE_FR_FR
-
-// -- DEPRECATED - THESE ARE NOW EEPROM DEFINED -- //
 uint16_t BGCOLOR=0x0001; // placeholder
 uint16_t FGCOLOR=0xFFF1; // placeholder
 
-#ifndef NEMO_VERSION
-  #define NEMO_VERSION "dev"
+#ifndef SONIC_VERSION
+  #define SONIC_VERSION "dev"
 #endif
 
 #if !defined(CARDPUTER) && !defined(STICK_C_PLUS2) && !defined(STICK_C_PLUS) && !defined(STICK_C)
@@ -31,7 +15,7 @@ uint16_t FGCOLOR=0xFFF1; // placeholder
 #endif
 
 // -=-=- DEAUTHER -=-  @bmorcelli -=-=- | Discord: Pirata#5263 bmorcelli
-#define DEAUTHER  //Need to make some changes in arduino IDE, refer to https://github.com/bmorcelli/m5stickC_Plus2-nemo/tree/main/DEAUTH%20Prerequisites
+#define DEAUTHER  //Need to make some changes in arduino IDE, refer to https://github.com/bmorcelli/m5stickC_Plus2-sonic/tree/main/DEAUTH%20Prerequisites
 
 
 #if defined(STICK_C_PLUS)
@@ -56,7 +40,7 @@ uint16_t FGCOLOR=0xFFF1; // placeholder
   #define DISP M5.Lcd
   #define IRLED 9
   #define SPEAKER M5.Beep
-//  #define BITMAP M5.Lcd.drawBitmap(0, 0, 320, 240, NEMOMatrix) // This doesn't work, generates static.
+//  #define BITMAP M5.Lcd.drawBitmap(0, 0, 320, 240, SONICMatrix) // This doesn't work, generates static.
   #define BITMAP Serial.println("unsupported")
   #define SD_CLK_PIN 0
   #define SD_MISO_PIN 36
@@ -87,7 +71,7 @@ uint16_t FGCOLOR=0xFFF1; // placeholder
   // -=-=- ALIASES -=-=-
   #define DISP M5.Lcd
   #define IRLED 19
-  #define BITMAP M5.Lcd.drawBmp(NEMOMatrix, 97338)
+  #define BITMAP M5.Lcd.drawBmp(SONICMatrix, 97338)
   #define M5_BUTTON_MENU 35
   #define M5_BUTTON_HOME 37
   #define M5_BUTTON_RST 39
@@ -150,7 +134,7 @@ uint16_t FGCOLOR=0xFFF1; // placeholder
   #define BACKLIGHT 38
   #define MINBRIGHT 165
   #define SPEAKER M5Cardputer.Speaker
-  #define BITMAP M5Cardputer.Display.drawBmp(NEMOMatrix, 97338)
+  #define BITMAP M5Cardputer.Display.drawBmp(SONICMatrix, 97338)
   #define SD_CLK_PIN 40
   #define SD_MISO_PIN 39
   #define SD_MOSI_PIN 14
@@ -160,51 +144,7 @@ uint16_t FGCOLOR=0xFFF1; // placeholder
   #define M5LED_OFF HIGH
 #endif
 
-// -=-=-=-=-=- LIST OF CURRENTLY DEFINED FEATURES -=-=-=-=-=-
-// M5LED      - A visible LED (Red) exposed on this pin number
-// IRLED      - An IR LED exposed on this pin number
-// RTC        - Real-time clock exposed as M5.Rtc 
-// AXP        - AXP192 Power Management exposed as M5.Axp
-// PWRMGMT    - StickC+2 Power Management exposed as M5.Power
-// KB         - Keyboard exposed as M5Cardputer.Keyboard
-// HID        - HID exposed as USBHIDKeyboard
-// USE_EEPROM - Store settings in EEPROM
-// ROTATION   - Allow screen to be rotated
-// DISP       - Set to the API's Display class
-// SDCARD     - Device has an SD Card Reader attached
-// SONG       - Play melody or beep on startup
-// SPEAKER    - Aliased to the prefix used for making noise
-// BACKLIGHT  - Alias to the pin used for the backlight on some models
-// MINBRIGHT  - The lowest number (0-255) for the backlight to show through
 
-/// SWITCHER ///
-// Proc codes
-// 0  - Clock
-// 1  - Main Menu
-// 2  - Settings Menu
-// 3  - Clock set
-// 4  - Dimmer Time adjustment
-// 5  - TV B-GONE
-// 6  - Battery info
-// 7  - screen rotation
-// 8  - AppleJuice Menu
-// 9  - AppleJuice Advertisement
-// 10 - Credits
-// 11 - Wifi beacon spam
-// 12 - Wifi tools menu
-// 13 - TV-B-Gone Region Setting
-// 14 - Wifi scanning
-// 15 - Wifi scan results
-// 16 - Bluetooth Spam Menu
-// 17 - Bluetooth Maelstrom
-// 18 - QR Codes
-// 19 - NEMO Portal
-// 20 - Attack menu
-// 21 - Deauth Attack
-// 22 - Custom Color Settings
-// 23 - Pre-defined color themes
-// .. - ..
-// 97 - Mount/UnMount SD Card on M5Stick devices, if SDCARD is declared
 
 const String contributors[] PROGMEM = {
   "@bicurico",
@@ -236,7 +176,7 @@ bool sourApple = false;     // Internal flag to place AppleJuice into SourApple 
 bool swiftPair = false;     // Internal flag to place AppleJuice into Swift Pair random packet Mode
 bool androidPair = false;   // Internal flag to place AppleJuice into Android Pair random packet Mode
 bool maelstrom = false;     // Internal flag to place AppleJuice into Bluetooth Maelstrom mode
-bool portal_active = false; // Internal flag used to ensure NEMO Portal exits cleanly
+bool portal_active = false; // Internal flag used to ensure SONIC Portal exits cleanly
 bool activeQR = false; 
 const byte PortalTickTimer = 1000;
 String apSsidName = String("");
@@ -251,7 +191,7 @@ uint8_t channel;
 String apMac = String("");
 bool target_deauth_flg = false;
 bool target_deauth = false;
-int deauth_tick = 0;        // used to delay the deauth packets when combined to Nemo Portal
+int deauth_tick = 0;        // used to delay the deauth packets when combined to SONIC Portal
 bool clone_flg = false;
 // DEAUTH end
 
@@ -269,7 +209,7 @@ bool clone_flg = false;
 #include "wifispam.h"
 #include "sd.h"
 #include "portal.h"
-#include "NEMOMatrix.h"
+#include "SONICMatrix.h"
 #include "songs.h"
 #include "localization.h"
 #include <BLEUtils.h>
@@ -431,6 +371,7 @@ MENU mmenu[] = {
   { "Bluetooth", 16},
   { "WiFi", 12},
   { "QR Codes", 18},
+  { "App Connection", 24}, // Add this line here
   { TXT_SETTINGS, 2},
 };
 int mmenu_size = sizeof(mmenu) / sizeof(MENU);
@@ -609,7 +550,7 @@ void clearSettings(){
   DISP.setRotation(1);
   DISP.setTextColor(BLUE, WHITE);
   DISP.setCursor(40, 0);
-  DISP.println("M5-NEMO");
+  DISP.println("M5-SONIC");
   DISP.setTextColor(WHITE, BLUE);
   DISP.setTextSize(SMALL_TEXT);
   DISP.println(TXT_CLRING_SETTINGS);
@@ -790,7 +731,7 @@ void color_loop() {
 
 MENU thmenu[] = {
   { TXT_BACK, 0},
-  { "Nemo", 1},
+  { "Sonic", 1},
   { "Tux", 2},
   { "Bill", 3},
   { "Steve", 4},
@@ -825,7 +766,7 @@ void theme_loop() {
         FG=11;
         BG=1;
         break;       
-      case 1: // Nemo
+      case 1: // SONIC
         FG=11;
         BG=1;
         break;
@@ -1740,13 +1681,13 @@ void aj_adv(){
 /// CREDITS ///
 void credits_setup(){
   DISP.fillScreen(WHITE);
-  DISP.qrcode("https://github.com/n0xa/m5stick-nemo", 145, 22, 100, 5);
+  DISP.qrcode("https://github.com/n0xa/m5stick-sonic", 145, 22, 100, 5);
   DISP.setTextColor(BLACK, WHITE);
   DISP.setTextSize(MEDIUM_TEXT);
   DISP.setCursor(0, 10);
-  DISP.print(" M5-NEMO\n");
+  DISP.print(" M5-SONIC\n");
   DISP.setTextSize(SMALL_TEXT);
-  DISP.printf("  %s\n",NEMO_VERSION);
+  DISP.printf("  %s\n",SONIC_VERSION);
   DISP.println(" For M5Stack");
   DISP.printf(" %s\n\n", platformName);
   DISP.println("Contributors:");
@@ -1897,7 +1838,7 @@ MENU wsmenu[] = {
   { TXT_WF_SPAM_FUN, 1},
   { TXT_WF_SPAM_RR, 2},
   { TXT_WF_SPAM_RND, 3},
-  { "NEMO Portal", 4},
+  { "SONIC Portal", 4},
 };
 int wsmenu_size = sizeof(wsmenu) / sizeof (MENU);
 
@@ -2116,7 +2057,7 @@ void wsAmenu_loop() {
     current_proc = 20;
     isSwitching = true;
     switch(option) {
-      case 0:                     //Go to Clone Nemo Portal
+      case 0:                     //Go to Clone Sonic Portal
         rstOverride = false;
         isSwitching = true;
         clone_flg=true;
@@ -2131,7 +2072,7 @@ void wsAmenu_loop() {
           target_deauth=true;
           current_proc = 21;                                                                 // iserir codigo do deauth aqui
           break;
-        case 2:                     //Go to Nemo with Deauth
+        case 2:                     //Go to SONIC with Deauth
           rstOverride = false;
           isSwitching = true;
           clone_flg=true;
@@ -2224,10 +2165,10 @@ void bootScreen(){
   DISP.fillScreen(BGCOLOR);
   DISP.setTextSize(BIG_TEXT);
   DISP.setCursor(40, 0);
-  DISP.println("M5-NEMO");
+  DISP.println("M5-SONIC");
   DISP.setCursor(10, 30);
   DISP.setTextSize(SMALL_TEXT);
-  DISP.printf("%s-%s\n",NEMO_VERSION,platformName);
+  DISP.printf("%s-%s\n",SONIC_VERSION,platformName);
 #if defined(CARDPUTER)
   DISP.println(TXT_INST_NXT);
   DISP.println(TXT_INST_PRV);
@@ -2293,7 +2234,7 @@ void qrmenu_loop() {
   }
 }
 
-/// NEMO PORTAL
+/// SONIC PORTAL
 
 void portal_setup(){
   setupWiFi();
@@ -2432,7 +2373,7 @@ void setup() {
   pAdvertising = pServer->getAdvertising();
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
 
-  // Nemo Portal Init
+  // SONIC Portal Init
   setupSdCard();
   bootTime = lastActivity = millis();
 
